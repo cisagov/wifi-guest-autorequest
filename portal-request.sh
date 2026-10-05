@@ -64,8 +64,16 @@ load_config() {
     value="${value%[\"\']}"
     case "$key" in
       GUEST_NAME | GUEST_EMAIL | SPONSOR_EMAIL | PORTAL_HOST_PATTERN | \
-        DURATION_QTY | DURATION_UNITS | IFACE | APPROVAL_TIMEOUT_SECS | NOTIFY_TITLE)
+        IFACE | NOTIFY_TITLE)
         printf -v "$key" '%s' "$value"
+        ;;
+      # numeric settings are used in arithmetic, where bash evaluates
+      # non-numeric text (a code-execution vector) — digits only
+      DURATION_QTY | DURATION_UNITS | APPROVAL_TIMEOUT_SECS)
+        case "$value" in
+          '' | *[!0-9]*) echo "   ignoring non-numeric value for $key" >&2 ;;
+          *) printf -v "$key" '%s' "$value" ;;
+        esac
         ;;
       *)
         echo "   ignoring unknown config key: $key" >&2
