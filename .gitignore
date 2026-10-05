@@ -6,3 +6,6 @@
 __pycache__
 .mypy_cache
 .python-version
+
+# DEBUG=1 captures — contain live portal session tokens
+*.html
