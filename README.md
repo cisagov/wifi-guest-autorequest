@@ -1,9 +1,9 @@
-# skeleton-generic #
+# wifi-guest-autorequest #
 
-[![GitHub Build Status](https://github.com/cisagov/skeleton-generic/workflows/build/badge.svg)](https://github.com/cisagov/skeleton-generic/actions)
-[![License](https://img.shields.io/github/license/cisagov/skeleton-generic
+[![GitHub Build Status](https://github.com/cisagov/wifi-guest-autorequest/workflows/build/badge.svg)](https://github.com/cisagov/wifi-guest-autorequest/actions)
+[![License](https://img.shields.io/github/license/cisagov/wifi-guest-autorequest
 )](https://spdx.org/licenses/)
-[![CodeQL](https://github.com/cisagov/skeleton-generic/workflows/CodeQL/badge.svg)](https://github.com/cisagov/skeleton-generic/actions/workflows/codeql-analysis.yml)
+[![CodeQL](https://github.com/cisagov/wifi-guest-autorequest/workflows/CodeQL/badge.svg)](https://github.com/cisagov/wifi-guest-autorequest/actions/workflows/codeql-analysis.yml)
 
 This is a generic skeleton project that can be used to quickly get a
 new [cisagov](https://github.com/cisagov) GitHub project started.
