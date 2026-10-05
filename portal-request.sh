@@ -72,7 +72,8 @@ load_config() {
       DURATION_QTY | DURATION_UNITS | APPROVAL_TIMEOUT_SECS)
         case "$value" in
           '' | *[!0-9]*) echo "   ignoring non-numeric value for $key" >&2 ;;
-          *) printf -v "$key" '%s' "$value" ;;
+          # force base 10: bash reads leading-zero literals as octal
+          *) printf -v "$key" '%s' "$((10#$value))" ;;
         esac
         ;;
       *)
