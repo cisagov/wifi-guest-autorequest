@@ -154,8 +154,11 @@ resolve_host() {
     | awk '/^([0-9]+\.){3}[0-9]+$/ { print; exit }' || true
 }
 
-# Common curl options; portal host pins are appended once discovered
+# Common curl options; portal host pins are appended once discovered.
+# Timeouts keep a hung portal from stalling the script (and holding the
+# LaunchAgent lock) indefinitely; later per-request options override.
 CURL=(curl --silent --show-error
+  --connect-timeout 10 --max-time 60
   --interface "$IFACE"
   --user-agent "$USER_AGENT"
   --cookie "$COOKIE_JAR" --cookie-jar "$COOKIE_JAR")
@@ -255,7 +258,10 @@ poll_url=$(printf '%s' "$sponsor_response" | tr '\n' ' ' \
 notify "Request sent — waiting for sponsor approval (up to $((APPROVAL_TIMEOUT_SECS / 60)) min)…"
 deadline=$((SECONDS + APPROVAL_TIMEOUT_SECS))
 while :; do
-  poll_response=$("${CURL[@]}" --location --request POST "$poll_url")
+  # a failed or timed-out poll is just another "not approved yet" so the
+  # deadline below stays in charge
+  poll_response=$("${CURL[@]}" --location --max-time 30 --request POST "$poll_url") \
+    || poll_response=""
   approved=$(printf '%s' "$poll_response" \
     | sed -E 's/.*"success":[[:space:]]*([^,}]*).*/\1/')
   [ "$approved" = "true" ] && break
