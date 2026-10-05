@@ -132,8 +132,10 @@ require_config() {
 }
 
 debug_save() { # debug_save <filename> <content>
-  [ -n "${DEBUG:-}" ] && printf '%s' "$2" > "$1"
-  return 0
+  [ -n "${DEBUG:-}" ] || return 0
+  # captures hold session tokens and submitted personal data
+  rm -f "$1"
+  (umask 077 && printf '%s' "$2" > "$1")
 }
 
 COOKIE_JAR=$(mktemp -t portal_cookies)
