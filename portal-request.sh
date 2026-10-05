@@ -210,6 +210,12 @@ base_href=$(printf '%s\n' "$splash_html" \
   | sed -n 's/.*<base href="\([^"]*\)".*/\1/p')
 [ -n "$base_href" ] || die "no <base href> on splash page (DEBUG=1 to save it)"
 login_url="${base_href}login"
+# the portal controls <base href>; never follow it off the verified
+# portal host or off TLS
+case "$login_url" in
+  "https://${splash_host}/"*) ;;
+  *) die "login endpoint is not on https://${splash_host} - not submitting" ;;
+esac
 
 # 5) Submit the two-stage form: guest info, then sponsor info
 echo "→ submitting guest-info form…"
