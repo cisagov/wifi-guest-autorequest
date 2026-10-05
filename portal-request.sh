@@ -191,7 +191,9 @@ splash_host=$(printf '%s' "$splash_url" | sed -E 's#^https?://([^/:]+).*#\1#')
 # shellcheck disable=SC2254 # glob expansion of the pattern is intended
 case "$splash_host" in
   $PORTAL_HOST_PATTERN) ;;
-  *) die "unrecognized portal host '$splash_host' - not submitting credentials" ;;
+  # not our portal: an error interactively, but routine for the agent,
+  # which probes every captive network this machine joins
+  *) nothing_to_do "unrecognized portal host '$splash_host' - not submitting" ;;
 esac
 
 notify "Captive portal detected — requesting guest access for ${GUEST_EMAIL}…"
